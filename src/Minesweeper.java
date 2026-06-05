@@ -5,6 +5,15 @@ import java.util.Random;
 import javax.swing.*;
 
 public class Minesweeper {
+    private class MineTile extends JButton{
+        int r;
+        int c;
+
+        public MineTile(int r, int c){
+            this.r = r;
+            this.c = c;
+        }
+    }
     int tileSize = 70;
     int numRows = 8;
     int numCols = numRows;
@@ -13,6 +22,10 @@ public class Minesweeper {
     JFrame frame = new JFrame("Minesweeper");
     JLabel textLabel = new JLabel();
     JPanel textPanel = new JPanel();
+    JPanel boardPanel = new JPanel();
+
+    MineTile[][] board = new MineTile[numRows][numCols];
+
     Minesweeper (){
         frame.setVisible(true);
         frame.setSize(boardWidth, boardHeight);
@@ -27,6 +40,17 @@ public class Minesweeper {
         textLabel.setOpaque(true);
         textPanel.setLayout(new BorderLayout());
         textPanel.add(textLabel);
-        frame.add(textPanel);
+        frame.add(textPanel, BorderLayout.NORTH);
+
+        boardPanel.setLayout(new GridLayout(numRows, numCols));
+        boardPanel.setBackground(Color.PINK);
+        frame.add(boardPanel);
+
+        for (int r = 0; r < numRows; r++){
+            for (int c = 0; c < numCols; c++){
+                MineTile tile = new MineTile(r, c);
+                board[r][c] = tile;
+            }
+        }
     }
 }
