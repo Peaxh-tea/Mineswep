@@ -50,6 +50,13 @@ public class Minesweeper {
             for (int c = 0; c < numCols; c++){
                 MineTile tile = new MineTile(r, c);
                 board[r][c] = tile;
+
+                tile.setFocusable(false);
+                tile.setMargin(new Insets(0, 0, 0, 0));
+                tile.setFont(new Font("Times New Roman", Font.PLAIN,  45));
+                tile.setText("1");
+                boardPanel.add(tile);
+
             }
         }
     }
