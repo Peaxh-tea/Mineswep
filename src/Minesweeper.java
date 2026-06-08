@@ -25,6 +25,7 @@ public class Minesweeper {
     JPanel boardPanel = new JPanel();
 
     MineTile[][] board = new MineTile[numRows][numCols];
+    ArrayList<MineTile> mineList;
 
     Minesweeper (){
         frame.setVisible(true);
@@ -54,10 +55,95 @@ public class Minesweeper {
                 tile.setFocusable(false);
                 tile.setMargin(new Insets(0, 0, 0, 0));
                 tile.setFont(new Font("Times New Roman", Font.PLAIN,  45));
-                tile.setText("1");
+                // tile.setText(":<");
                 boardPanel.add(tile);
+                tile.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mousePressed(MouseEvent e){
+                        MineTile tile = (MineTile) e.getSource();
 
+                        if (e.getButton() == MouseEvent.BUTTON1){
+                            if (tile.getText() == ""){
+                                if (mineList.contains(tile)){
+                                    revealMines();
+                                }
+                                else{
+                                    checkMine(tile.r, tile.c);
+                                }
+                            }
+                        }
+                        if (e.getButton() == MouseEvent.BUTTON3){
+                            if (tile.getText() == "") {
+                                tile.setText("?");
+                            }
+                        }
+                    }
+                });
             }
         }
+        frame.setVisible(true);
+        setMines();
+    }
+    void setMines() {
+        mineList = new ArrayList<MineTile>();
+
+        mineList.add(board[2][2]);
+        mineList.add(board[2][3]);
+        mineList.add(board[5][6]);
+        mineList.add(board[3][4]);
+        mineList.add(board[1][1]);
+    }
+
+    void revealMines(){
+        for (int i = 0; i < mineList.size(); i++){
+            MineTile tile = mineList.get(i);
+            tile.setText(":<");
+        }
+    }
+
+    void checkMine(int r, int c){
+        if (r < 0|| r >= numRows || c < 0 || c >= numCols){
+            return;
+        }
+        MineTile tile = board[r][c];
+        if(!tile.isEnabled()){
+            return;
+        }
+        tile.setEnabled(false);
+
+        int minesFound = 0;
+        minesFound += countMine(r - 1, c - 1);
+        minesFound += countMine(r - 1, c);
+        minesFound += countMine(r - 1, c + 1);
+        minesFound += countMine(r, c - 1);
+        minesFound += countMine(r, c + 1);
+        minesFound += countMine(r + 1, c - 1);
+        minesFound += countMine(r + 1, c);
+        minesFound += countMine(r + 1, c + 1);
+
+        if (minesFound > 0){
+            tile.setText(Integer.toString(minesFound));
+        }
+        else {
+            tile.setText("");
+            checkMine(r - 1, c -1);
+            checkMine(r - 1, c);
+            checkMine(r - 1, c + 1);
+            checkMine(r, c + 1);
+            checkMine(r, c - 1);
+            checkMine(r + 1, c - 1);
+            checkMine(r + 1, c);
+            checkMine(r + 1, c + 1);
+        }
+    }
+
+    int countMine(int r, int c){
+        if (r < 0|| r >= numRows || c < 0 || c >= numCols){
+            return 0;
+        }
+        if (mineList.contains(board[r][c])){
+            return 1;
+        }
+        return 0;
     }
 }
