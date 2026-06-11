@@ -41,7 +41,7 @@ public class Minesweeper {
 
         textLabel.setFont(new Font("Times New Roman", Font.BOLD, 25));
         textLabel.setHorizontalAlignment(JLabel.CENTER);
-        textLabel.setText("Minesweeper");
+        textLabel.setText("Yun-sweeper :3");
         textLabel.setOpaque(true);
         textPanel.setLayout(new BorderLayout());
         textPanel.add(textLabel);
