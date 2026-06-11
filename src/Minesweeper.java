@@ -89,6 +89,9 @@ public class Minesweeper {
                             }
                             textLabel.setText("Mines Left: " + mineCount);
                         }
+                        if (SwingUtilities.isLeftMouseButton(e) && SwingUtilities.isRightMouseButton(e)){
+                            chord(tile.r, tile.c);
+                        }
                     }
                 });
             }
@@ -169,5 +172,23 @@ public class Minesweeper {
             return 1;
         }
         return 0;
+    }
+
+    void chord(int r, int c){
+        if (board[r][c].getText() != ""){
+            int minesNear = Integer.parseInt(board[r][c].getText());
+            int checkedMines = 0;
+            if (board[r-1][c+1].getText().equals("?")) checkedMines++;
+            if (board[r-1][c].getText().equals("?")) checkedMines++;
+            if (board[r-1][c-1].getText().equals("?")) checkedMines++;
+            if (board[r][c+1].getText().equals("?")) checkedMines++;
+            if (board[r][c-1].getText().equals("?")) checkedMines++;
+            if (board[r+1][c+1].getText().equals("?")) checkedMines++;
+            if (board[r+1][c-1].getText().equals("?")) checkedMines++;
+            if (board[r+1][c].getText().equals("?")) checkedMines++;
+            if (checkedMines == minesNear){
+                board[r-1][c+1]
+            }
+        }
     }
 }
