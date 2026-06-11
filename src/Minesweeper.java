@@ -27,6 +27,10 @@ public class Minesweeper {
     MineTile[][] board = new MineTile[numRows][numCols];
     ArrayList<MineTile> mineList;
 
+    int tilesClicked = 0;
+    boolean gameOver;
+    int mineCount = 10;
+
     Minesweeper (){
         frame.setVisible(true);
         frame.setSize(boardWidth, boardHeight);
@@ -61,7 +65,9 @@ public class Minesweeper {
                     @Override
                     public void mousePressed(MouseEvent e){
                         MineTile tile = (MineTile) e.getSource();
-
+                        if (gameOver){
+                            return;
+                        }
                         if (e.getButton() == MouseEvent.BUTTON1){
                             if (tile.getText() == ""){
                                 if (mineList.contains(tile)){
@@ -75,7 +81,13 @@ public class Minesweeper {
                         if (e.getButton() == MouseEvent.BUTTON3){
                             if (tile.getText() == "") {
                                 tile.setText("?");
+                                mineCount--;
                             }
+                            else if (tile.getText() == "?") {
+                                tile.setText("");
+                                mineCount++;
+                            }
+                            textLabel.setText("Mines Left: " + mineCount);
                         }
                     }
                 });
@@ -86,19 +98,26 @@ public class Minesweeper {
     }
     void setMines() {
         mineList = new ArrayList<MineTile>();
-
-        mineList.add(board[2][2]);
-        mineList.add(board[2][3]);
-        mineList.add(board[5][6]);
-        mineList.add(board[3][4]);
-        mineList.add(board[1][1]);
+        for (int i = 0; i < mineCount; i++){
+            int row = (int) ((numRows)*(Math.random()));
+            int col = (int) ((numCols)*(Math.random()));
+            if (mineList.contains(board[row][col])) {
+                i--;
+            }
+            else {
+                mineList.add(board[row][col]);
+            }
+        }
     }
 
     void revealMines(){
         for (int i = 0; i < mineList.size(); i++){
             MineTile tile = mineList.get(i);
             tile.setText(":<");
+            textLabel.setText("Yun Died! >~<");
         }
+
+        gameOver = true;
     }
 
     void checkMine(int r, int c){
@@ -134,6 +153,11 @@ public class Minesweeper {
             checkMine(r + 1, c - 1);
             checkMine(r + 1, c);
             checkMine(r + 1, c + 1);
+        }
+        tilesClicked++;
+        if (tilesClicked == numRows * numCols - mineList.size()){
+            gameOver = true;
+            textLabel.setText("Yun Win! >W<");
         }
     }
 
