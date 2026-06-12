@@ -77,6 +77,9 @@ public class Minesweeper {
                                     checkMine(tile.r, tile.c);
                                 }
                             }
+//                            if (tile.getText() != "" && tile.getText() != "?"){
+//                                chord(tile.r, tile.c);
+//                            }
                         }
                         if (e.getButton() == MouseEvent.BUTTON3){
                             if (tile.getText() == "") {
@@ -89,22 +92,21 @@ public class Minesweeper {
                             }
                             textLabel.setText("Mines Left: " + mineCount);
                         }
-                        if (SwingUtilities.isLeftMouseButton(e) && SwingUtilities.isRightMouseButton(e)){
-                            chord(tile.r, tile.c);
-                        }
                     }
                 });
             }
         }
         frame.setVisible(true);
-        setMines();
+        if (tilesClicked <= 1){
+            setMines();
+        }
     }
     void setMines() {
         mineList = new ArrayList<MineTile>();
         for (int i = 0; i < mineCount; i++){
             int row = (int) ((numRows)*(Math.random()));
             int col = (int) ((numCols)*(Math.random()));
-            if (mineList.contains(board[row][col])) {
+            if (mineList.contains(board[row][col])&&board[row][col].isEnabled()) {
                 i--;
             }
             else {
@@ -174,21 +176,29 @@ public class Minesweeper {
         return 0;
     }
 
-    void chord(int r, int c){
-        if (board[r][c].getText() != ""){
-            int minesNear = Integer.parseInt(board[r][c].getText());
-            int checkedMines = 0;
-            if (board[r-1][c+1].getText().equals("?")) checkedMines++;
-            if (board[r-1][c].getText().equals("?")) checkedMines++;
-            if (board[r-1][c-1].getText().equals("?")) checkedMines++;
-            if (board[r][c+1].getText().equals("?")) checkedMines++;
-            if (board[r][c-1].getText().equals("?")) checkedMines++;
-            if (board[r+1][c+1].getText().equals("?")) checkedMines++;
-            if (board[r+1][c-1].getText().equals("?")) checkedMines++;
-            if (board[r+1][c].getText().equals("?")) checkedMines++;
-            if (checkedMines == minesNear){
-                board[r-1][c+1]
-            }
-        }
-    }
+//    void chord(int r, int c){
+//        if (board[r][c].getText() != ""){
+//            int minesNear = Integer.parseInt(board[r][c].getText());
+//            int checkedMines = 0;
+//            if (board[r-1][c+1].getText().equals("?")) checkedMines++;
+//            if (board[r-1][c].getText().equals("?")) checkedMines++;
+//            if (board[r-1][c-1].getText().equals("?")) checkedMines++;
+//            if (board[r][c+1].getText().equals("?")) checkedMines++;
+//            if (board[r][c-1].getText().equals("?")) checkedMines++;
+//            if (board[r+1][c+1].getText().equals("?")) checkedMines++;
+//            if (board[r+1][c-1].getText().equals("?")) checkedMines++;
+//            if (board[r+1][c].getText().equals("?")) checkedMines++;
+//            if (checkedMines == minesNear){
+//
+//                for (int row = r-1; row <= r+1; row++){
+//                    for (int col = c-1; col <= c+1; col++){
+//                        if
+//                    }
+//                }
+//                if (mineList.contains(board[r][c])){
+//                    revealMines();
+//                }
+//            }
+//        }
+//    }
 }
